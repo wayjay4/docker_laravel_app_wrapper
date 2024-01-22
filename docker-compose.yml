@@ -4,11 +4,11 @@ services:
   nginx:
     build:
       context: .
-      dockerfile: nginx.dockerfile
+      dockerfile: docker/nginx.dockerfile
     ports: 
       - 80:80
     volumes:
-      - ./src:/var/www/html
+      - ./:/var/www/html
     depends_on:
       - mysql
       - php
@@ -22,32 +22,32 @@ services:
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
     volumes:
-      - ./mysql:/var/lib/mysql
+      - ./docker/mysql:/var/lib/mysql
   php:
     build:
       context: .
-      dockerfile: php.dockerfile
+      dockerfile: docker/php.dockerfile
     volumes:
-      - ./src:/var/www/html
+      - ./:/var/www/html
   composer:
     build:
       context: .
-      dockerfile: composer.dockerfile
+      dockerfile: docker/composer.dockerfile
     volumes:
-      - ./src:/var/www/html
+      - ./:/var/www/html
     working_dir: /var/www/html
   npm:
     image: node:21.6.0-alpine
     volumes:
-      - ./src:/var/www/html
+      - ./:/var/www/html
     entrypoint: ["npm"]
     working_dir: /var/www/html
   artisan:
     build:
       context: .
-      dockerfile: php.dockerfile
+      dockerfile: docker/php.dockerfile
     volumes:
-      - ./src:/var/www/html
+      - ./:/var/www/html
     working_dir: /var/www/html
     depends_on:
       - mysql
